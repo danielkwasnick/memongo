@@ -1,4 +1,4 @@
-module github.com/benweissmann/memongo
+module github.com/danielkwasnick/memongo
 
 require (
 	github.com/acobaugh/osrelease v0.0.0-20181218015638-a93a0a55a249

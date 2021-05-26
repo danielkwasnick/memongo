@@ -9,12 +9,13 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"os"
 	"path"
 	"regexp"
 	"strings"
 	"time"
 
-	"github.com/benweissmann/memongo/memongolog"
+	"github.com/danielkwasnick/memongo/memongolog"
 	"github.com/spf13/afero"
 )
 
@@ -130,7 +131,11 @@ func GetOrDownloadMongod(urlStr string, cachePath string, logger *memongolog.Log
 
 	renameErr := afs.Rename(mongodTmpFile.Name(), mongodPath)
 	if renameErr != nil {
-		return "", fmt.Errorf("error writing mongod binary from %s to %s: %s", mongodTmpFile.Name(), mongodPath, renameErr)
+		logger.Warnf("error writing mongod binary from %s to %s: %s", mongodTmpFile.Name(), mongodPath, renameErr)
+		symLinkErr := os.Symlink(mongodTmpFile.Name(), mongodPath)
+		if symLinkErr != nil {
+			return "", fmt.Errorf("error creating symbolic link for mongod binary from %s to %s: %s", mongodPath, mongodTmpFile.Name(), symLinkErr)
+		}
 	}
 
 	logger.Infof("finished downloading mongod to %s in %s", mongodPath, time.Since(downloadStartTime).String())

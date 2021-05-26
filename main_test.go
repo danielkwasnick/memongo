@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/benweissmann/memongo/memongolog"
+	"github.com/danielkwasnick/memongo/memongolog"
 
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/mongo"
